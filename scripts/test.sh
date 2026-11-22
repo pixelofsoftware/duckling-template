@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Testy wyjścia: buduje pakiet i porównuje wyjście programu z oczekiwanym.
 # Każdy przypadek to para tests/cases/<nazwa>.in (wejście) i tests/cases/<nazwa>.out (oczekiwane wyjście).
+# Opcjonalny plik tests/cases/<nazwa>.code zawiera oczekiwany kod zakończenia (domyślnie 0).
 #
 #   scripts/test.sh              # duck build, potem wszystkie przypadki
 #   scripts/test.sh --no-build   # bez budowania (np. w CI po osobnym kroku duck build)
@@ -27,12 +28,16 @@ for input in tests/cases/*.in; do
     case_name="$(basename "$input" .in)"
     expected="tests/cases/$case_name.out"
     [[ -f "$expected" ]] || { echo "SKIP $case_name (brak $expected)"; continue; }
+    want_code=0
+    [[ -f "tests/cases/$case_name.code" ]] && want_code="$(tr -d '[:space:]' < "tests/cases/$case_name.code")"
     actual="$(mktemp)"
-    if ${runner[@]+"${runner[@]}"} "$exe" < "$input" > "$actual" 2>/dev/null && diff -u "$expected" "$actual" > /dev/null; then
+    code=0
+    ${runner[@]+"${runner[@]}"} "$exe" < "$input" > "$actual" 2>/dev/null || code=$?
+    if [[ "$code" == "$want_code" ]] && diff -u "$expected" "$actual" > /dev/null; then
         echo "OK   $case_name"
         passed=$((passed + 1))
     else
-        echo "FAIL $case_name"
+        echo "FAIL $case_name (kod zakończenia $code, oczekiwany $want_code)"
         diff -u "$expected" "$actual" | sed 's/^/     /' || true
         failed=$((failed + 1))
     fi

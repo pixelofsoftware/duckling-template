@@ -56,6 +56,7 @@ scripts/test.sh
 ```
 
 Każdy przypadek to para plików w `tests/cases/`: `nazwa.in` (wejście) i `nazwa.out` (oczekiwane wyjście).
+Opcjonalny `nazwa.code` to oczekiwany kod zakończenia (domyślnie 0), np. dla przypadków z błędnymi danymi.
 Skrypt buduje pakiet, uruchamia program na każdym wejściu i porównuje wyjście bajt w bajt. Nowy test to po
 prostu nowa para plików. Limit czasu na przypadek: `TEST_TIMEOUT=10` (sekundy).
 
@@ -75,6 +76,10 @@ prostu nowa para plików. Limit czasu na przypadek: `TEST_TIMEOUT=10` (sekundy).
 ├── .gitattributes          # *.dk jako Duckling w statystykach GitHuba
 └── .editorconfig
 ```
+
+Importy modułów pakietu: w `src.dk` wystarczy `import statystyki;`, ale moduł, który używa innego modułu,
+importuje go po nazwie pakietu, np. w `src/raport.dk`: `import my_project.statystyki;` (krótkie
+`import statystyki;` daje tam „Module not found”). `scripts/init.sh` zmienia też te importy.
 
 Po pierwszym `duck build` powstaje `quackfreeze.json` (zamrożone wersje zależności). Dodaj go do repozytorium.
 
