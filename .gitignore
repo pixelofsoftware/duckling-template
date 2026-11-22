@@ -1,0 +1,12 @@
+# Artefakty budowania (duck build)
+.duck_build/
+build/
+
+# Python (skrypty pomocnicze)
+__pycache__/
+*.pyc
+
+# Systemy i edytory
+.DS_Store
+.idea/
+*.swp

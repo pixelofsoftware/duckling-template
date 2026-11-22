@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Błąd w kompilatorze lub narzędziach Ducklinga
+    url: https://github.com/ducktype-org/duckling/issues
+    about: Błędy duckc, duck i biblioteki standardowej zgłaszaj w repozytorium Ducklinga.
+  - name: Dokumentacja Ducklinga
+    url: https://docs.duckling.pl/
+    about: Opis języka i narzędzi.

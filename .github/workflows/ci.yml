@@ -1,0 +1,53 @@
+# Buduje pakiet oficjalnym wydaniem Ducklinga i uruchamia testy wyjścia (scripts/test.sh).
+# Toolchain: https://github.com/ducktype-org/duckling/releases, sprawdzany sumą SHA-256.
+# Przy zmianie wersji zaktualizuj DUCKLING_VERSION i DUCKLING_SHA256 (suma pliku .tar.gz z wydania).
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  DUCKLING_VERSION: "0.3"
+  DUCKLING_SHA256: "29217c598a348a89186ac058dbdc3bdb7efd2f8b55e718a89c1d1bf93a76885b"
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache Duckling toolchain
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: ~/duckling
+          key: duckling-${{ env.DUCKLING_VERSION }}-${{ env.DUCKLING_SHA256 }}
+
+      - name: Install Duckling ${{ env.DUCKLING_VERSION }}
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          url="https://github.com/ducktype-org/duckling/releases/download/v${DUCKLING_VERSION}/duckling-${DUCKLING_VERSION}-linux-x86_64.tar.gz"
+          curl -fsSL --retry 3 -o /tmp/duckling.tar.gz "$url"
+          echo "${DUCKLING_SHA256}  /tmp/duckling.tar.gz" | sha256sum -c -
+          mkdir -p ~/duckling
+          tar -xzf /tmp/duckling.tar.gz -C ~/duckling --strip-components=1
+
+      - name: Add Duckling to PATH
+        run: |
+          echo "$HOME/duckling/bin" >> "$GITHUB_PATH"
+
+      - name: Toolchain version
+        run: |
+          duck --version
+          duckc --version
+
+      - name: Build
+        run: duck build
+
+      - name: Test
+        run: scripts/test.sh --no-build

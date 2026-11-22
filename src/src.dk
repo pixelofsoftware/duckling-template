@@ -1,0 +1,21 @@
+# Punkt wejścia pakietu: `duck run` uruchamia main().
+# Wejście: n, potem n liczb całkowitych. Wyjście: ich suma i maksimum.
+import core.builtins.*;
+import statystyki;
+
+fun main() = {
+    var n = builtin_input_i64();
+    if (n <= 0) {
+        print("brak danych\n");
+        return 0;
+    }
+    var liczby: List[i64];
+    var i: i64 = 0;
+    while (i < n) {
+        liczby.push(builtin_input_i64());
+        i += 1;
+    }
+    print(f"suma: {statystyki.suma(&liczby)}\n");
+    print(f"maksimum: {statystyki.maksimum(&liczby)}\n");
+    return 0;
+}

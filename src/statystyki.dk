@@ -1,0 +1,24 @@
+# Moduł pakietu: funkcje używane w src.dk (import statystyki;).
+# Kolejne moduły dodawaj jako src/<nazwa>.dk i importuj przez `import <nazwa>;`.
+
+# Suma wszystkich elementów.
+fun suma(liczby: ref List[i64]) -> i64 = {
+    var wynik: i64 = 0;
+    var i: i64 = 0;
+    while (i < liczby.length()) {
+        wynik += liczby.at(i);
+        i += 1;
+    }
+    return wynik;
+}
+
+# Największy element; lista nie może być pusta.
+fun maksimum(liczby: ref List[i64]) -> i64 = {
+    var wynik = liczby.at(0);
+    var i: i64 = 1;
+    while (i < liczby.length()) {
+        if (liczby.at(i) > wynik) wynik = liczby.at(i);
+        i += 1;
+    }
+    return wynik;
+}
