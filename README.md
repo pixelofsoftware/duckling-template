@@ -15,6 +15,8 @@ testy wyjścia i CI, które buduje projekt oficjalnym wydaniem Ducklinga.
 
 ## Jak użyć szablonu
 
+Pełna instrukcja (procedury krok po kroku, co zmieniać w przyszłości, diagram): [docs/INSTRUKCJA.md](docs/INSTRUKCJA.md).
+
 1. Na GitHubie kliknij **Use this template → Create a new repository**.
 2. Sklonuj nowe repozytorium i nadaj pakietowi własną nazwę (skrypt przestawia też odznakę CI na Twoje
    repozytorium, jeśli ma ustawiony `origin` na GitHubie):
@@ -72,6 +74,7 @@ prostu nowa para plików. Limit czasu na przypadek: `TEST_TIMEOUT=10` (sekundy).
 ├── scripts/
 │   ├── init.sh             # zmiana nazwy pakietu po utworzeniu repozytorium
 │   └── test.sh             # budowanie i testy
+├── docs/INSTRUKCJA.md      # instrukcja użytkownika szablonu
 ├── .github/workflows/ci.yml  # CI: oficjalny Duckling 0.3, duck build, testy
 ├── .gitattributes          # *.dk jako Duckling w statystykach GitHuba
 └── .editorconfig
