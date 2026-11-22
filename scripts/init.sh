@@ -17,6 +17,8 @@ old="$(sed -n 's/^[[:space:]]*name:[[:space:]]*//p' quackconfig.yaml | head -n 1
 
 perl -pi -e "s/^(\s*name:\s*).*/\${1}$new/" quackconfig.yaml
 perl -pi -e "s/\b\Q$old\E\b/$new/g" README.md
+# Moduły importujące inne moduły pakietu robią to po nazwie pakietu: import <pakiet>.<moduł>;
+find src -name '*.dk' -exec perl -pi -e "s/^(\s*import\s+)\Q$old\E\./\${1}$new./" {} +
 # Odznaka CI w README: z repozytorium szablonu na to, z którego pochodzi klon (origin na GitHubie).
 origin="$(git remote get-url origin 2>/dev/null || true)"
 if [[ "$origin" =~ github\.com[:/]([^/]+/[^/.]+)(\.git)?$ ]]; then
